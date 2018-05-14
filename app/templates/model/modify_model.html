@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content%}
+    <div class="row">
+        <div class="col">
+            <h1>{{ form.title }}</h1>
+            <p class="lead">{{ form.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="post" action="">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens='only') }}
+                <table class="table">
+                    {% for fields_item in fields %}
+                    <thead class="thead-light">
+                        <tr>
+                            {% for field in fields_item %}
+                                <th scope="col">{{ form[field].label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for field in fields_item %}
+                                <td>
+                                    <div class="form-group {% if form[field].errors %} has-error{% endif %}
+                                    {% if form[field].flags.required %} required{% endif %}">
+                                        {{ form[field](class_="form-control") }}
+                                        {% if form[field].errors %}
+                                            {% for error in form[field].errors %}
+                                                <p class="help-block">{{error}}</p>
+                                            {% endfor %}
+                                        {% elif form[field].description %}
+                                            <p class="help-block">{{form[field].description|safe}}</p>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {{ form.submit(class_="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

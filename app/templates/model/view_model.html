@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block app_content%}
+    <div class="row">
+        <div class="col">
+            <h1>{{ form.title }}</h1>
+            <p class="lead">{{ form.description }}</p>
+            <p>
+                <a class="btn btn-success" href="{{ url_for('model.add_model', form_html_name=form.html_name) }}">{{ _('Add') }}</a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if items %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Record</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <th scope="row">{{ item.rec_id }}</th>
+                        <td>{{ form.get_view_record(item) }}</td>
+                        <td>
+                            <!--
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary">Action</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ul>
+                            </div>
+                            -->
+                            <a class="btn btn-primary" href="{{ url_for('model.update_model', form_html_name=form.html_name, id=item.rec_id) }}">{{ _('Update') }}</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="{{ url_for('model.delete_model', form_html_name=form.html_name, id=item.rec_id) }}">{{ _('Delete') }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

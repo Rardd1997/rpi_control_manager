@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    {% if users %}
+        {% for user in users %}
+            <table class="table">
+                <tr>
+                    <td><img src="{{ user.avatar(128) }}"></td>
+                    <td><a href="{{ url_for("main.user", username=user.username) }}">{{ user.username }}</a>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+        {% if prev_url %}
+            <a href="{{ prev_url }}">Prev Page</a>
+        {% endif %}
+        {% if next_url %}
+            <a href="{{ next_url }}">Next Page</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}

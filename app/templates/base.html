@@ -1,0 +1,83 @@
+﻿{% extends 'bootstrap/base.html' %}
+{% block title %}
+    {% if title %}{{ title }} - {{ config['WEB_NAME'] }}{% else %}{{ _('Welcome to ') + config['WEB_NAME'] }}{% endif %}
+{% endblock %}
+{% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ config['WEB_NAME'] }}</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.index') }}">{{ _('Home') }}</a></li>
+                    <li><a href="{{ url_for('main.users_list') }}">{{ _('Users') }}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Tables
+                            <span class="caret"></span>
+                        </a>
+                        {% if g.models_form %}
+                            <ul class="dropdown-menu" role="menu">
+                                {% for model_form in g.models_form.values() %}
+                                    <li><a href="{{ url_for('model.view_model', form_html_name=model_form.html_name) }}">{{ _('%(title)s', title=model_form.title) }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Actions
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url_for('controller.open_door') }}">{{ _('Open Door') }}</a></li>
+                            <li><a href="{{ url_for('controller.close_door') }}">{{ _('Close Door') }}</a></li>
+                            <li><a href="{{ url_for('controller.open_door_reader') }}">{{ _('Read Card') }}</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_anonymous %}
+                    <li><a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Profile') }}</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block app_content %}{% endblock %}
+    </div>
+
+    <p></p>
+    <footer class="modal-footer">
+        <div class="container">
+            <span class="text-muted">{{ config['WEB_NAME'] }}. All right reserved</span>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.lang(g.locale) }}
+{% endblock %}

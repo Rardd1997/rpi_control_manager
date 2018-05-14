@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block app_content%}
+    <div class="row">
+        <div class="col">
+            <h1>{{ form.title }}</h1>
+            <p class="lead">{{ form.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="{{ url_for('model.update_model', form_html_name=form.html_name, id=item.rec_id) }}">{{ _('Update') }}</a>
+            <a class="btn btn-danger" href="{{ url_for('model.delete_model', form_html_name=form.html_name, id=item.rec_id) }}">{{ _('Delete') }}</a>
+            <form method="post" action="">
+                {{ form.hidden_tag() }}
+                <table class="table">
+                    {% for fields_item in fields %}
+                    <thead class="thead-light">
+                        <tr>
+                            {% for field in fields_item %}
+                                <th scope="col">{{ form[field].label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for field in fields_item %}
+                                <td>{{ item[field] }}</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+    </div>
+{% endblock %}

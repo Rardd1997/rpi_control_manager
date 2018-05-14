@@ -1,0 +1,9 @@
+﻿{% extends "base.html" %}
+
+{% block app_content %}
+    <div class="row">
+        <div class="col">
+            <h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
+        </div>
+    </div>
+{% endblock %}
